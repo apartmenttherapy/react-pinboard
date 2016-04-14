@@ -24,7 +24,13 @@ const ReactPinboard = React.createClass({
   childRefs: [],
 
   propTypes: {
-    cols: React.PropTypes.number,
+    cols: React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.arrayOf(React.PropTypes.shape({
+        media: React.PropTypes.string,
+        cols: React.PropTypes.number.isRequired
+      }))
+    ]),
     spacing: React.PropTypes.string
   },
   
@@ -40,7 +46,7 @@ const ReactPinboard = React.createClass({
     // equal-height for the initial, naive rendering.
     const childWeights = this.props.children.map(() => 1);
     return {
-      columns: _createColumnOrdering(childWeights, this.props.cols)
+      columns: _createColumnOrdering(childWeights, this.getNumCols())
     };
   },
   
@@ -63,17 +69,32 @@ const ReactPinboard = React.createClass({
     const childWeights = this.childRefs.map((c) => {
       return ReactDOM.findDOMNode(c).offsetHeight;
     });
-    const newColumns = _createColumnOrdering(childWeights, this.props.cols);
+    const newColumns = _createColumnOrdering(childWeights, this.getNumCols());
     
     if (JSON.stringify(newColumns) !== JSON.stringify(this.state.columns)) {
       this.setState({columns: newColumns});
     }
   },
   
+  getNumCols: function() {
+    if (typeof this.props.cols === 'number') {
+      return this.props.cols;
+    } else {
+      if (typeof window === 'undefined' || typeof window.matchMedia === 'undefined') {
+        // Server-renders and browser without matchMedia should use the last col
+        // value provided, which should represent the smallest viewport.
+        return this.props.cols[this.props.cols.length - 1].cols;
+      } else {
+        // Return the cols for the first-matching media query
+        return this.props.cols.filter((opt) => window.matchMedia(opt.media).matches)[0].cols;
+      }
+    }
+  },
+  
   getStyles: function() {
     return {
       pinColumn: {
-        width: `calc(${100 / this.props.cols}% - ${(this.props.cols-1)/this.props.cols} * ${this.props.spacing})`,
+        width: `calc(${100 / this.getNumCols()}% - ${(this.getNumCols()-1)/this.getNumCols()} * ${this.props.spacing})`,
         float: 'left',
         marginRight: this.props.spacing
       },
