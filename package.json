@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mattwondra/react-pinboard.git"
+    "url": "git+https://github.com/apartmenttherapy/react-pinboard.git"
   },
   "keywords": [
     "react",
@@ -17,12 +17,14 @@
     "pinboard",
     "layout"
   ],
-  "author": "Matt Wondra <mattwondra@gmail.com> (http://mattwondra.com)",
+  "contributors": [
+    "Matt Wondra <matt@apartmenttherapy.com> (http://mattwondra.com)"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mattwondra/react-pinboard/issues"
+    "url": "https://github.com/apartmenttherapy/react-pinboard/issues"
   },
-  "homepage": "https://github.com/mattwondra/react-pinboard#readme",
+  "homepage": "https://github.com/apartmenttherapy/react-pinboard#readme",
   "dependencies": {
     "lodash.debounce": "^4.0.5"
   },
