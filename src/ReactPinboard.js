@@ -108,7 +108,7 @@ const ReactPinboard = React.createClass({
     return (
       <div style={this.getStyles().pinboard}>
         {this.state.columns.map(this.renderColumn)}
-        <div style="clear: both;"></div>
+        <div style={{clear: 'left'}}></div>
       </div>
     );
   },
