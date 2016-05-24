@@ -3,6 +3,10 @@
   "version": "0.0.4",
   "description": "Responsive Pinterest-style layouts for React.js",
   "main": "lib/ReactPinboard.js",
+  "files": [
+    "lib",
+    "src"
+  ],
   "scripts": {
     "build": "babel ./src -d ./lib",
     "watch": "babel ./src -d ./lib --watch",
