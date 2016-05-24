@@ -5,7 +5,8 @@
   "main": "lib/ReactPinboard.js",
   "scripts": {
     "build": "babel ./src -d ./lib",
-    "watch": "babel ./src -d ./lib --watch"
+    "watch": "babel ./src -d ./lib --watch",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
