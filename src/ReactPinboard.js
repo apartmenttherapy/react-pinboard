@@ -67,7 +67,7 @@ const ReactPinboard = React.createClass({
   
   forceRefresh: function() {
     const childWeights = this.childRefs.map((c) => {
-      return ReactDOM.findDOMNode(c).offsetHeight;
+      return ReactDOM.findDOMNode(c).children[0].offsetHeight;
     });
     const newColumns = _createColumnOrdering(childWeights, this.getNumCols());
     
@@ -128,10 +128,9 @@ const ReactPinboard = React.createClass({
   },
   
   renderChild: function(index) {
-    const Element = React.cloneElement(this.props.children[index], {ref: (c) => { this.childRefs[index] = c; }});
     return (
-      <div style={this.getStyles().pinWrapper} key={index}>
-        {Element}
+      <div style={this.getStyles().pinWrapper} key={index} ref={(c) => { this.childRefs[index] = c; } }>
+        {this.props.children[index]}
       </div>
     );
   }
