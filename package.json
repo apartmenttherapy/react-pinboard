@@ -1,6 +1,6 @@
 {
   "name": "react-pinboard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Responsive Pinterest-style layouts for React.js",
   "main": "lib/ReactPinboard.js",
   "scripts": {
