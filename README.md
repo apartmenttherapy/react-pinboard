@@ -1,6 +1,6 @@
 # react-pinboard
 
-`<ReactPinboard>` is a component for responsive Pinterest-style layouts. Just pass in any number of children, and they will be rendered them in equally-weighted, dynamic columns.
+`<ReactPinboard>` is a component for responsive Pinterest-style layouts. Pass in any number of children to see them rendered in equally-weighted, dynamic columns.
 
 ## Props
 * __`cols`__: Can be a static number like `3` or an array of media objects, e.g.:  
