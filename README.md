@@ -56,5 +56,5 @@ ReactDOM.render(
 
 ## Examples
 Here's a few places you can see `react-pinboard` in the wild:
-* http://www.thekitchn.com/what-to-read-this-weekend-october-19-25-225017?redesign=true
-* http://www.apartmenttherapy.com/renovation-diary-karin-jeffs-bathroom-221802?redesign=true (Note: numeric ordering is preserved)
+* http://www.thekitchn.com/what-to-read-this-weekend-october-19-25-225017
+* http://www.apartmenttherapy.com/renovation-diary-karin-jeffs-bathroom-221802 (Note: numeric ordering is preserved)
