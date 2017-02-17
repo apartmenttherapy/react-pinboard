@@ -34,7 +34,7 @@ ReactDOM.render(
     <img src="..." />
     <div>
       <h3>Heading</h3>
-      <p>...</h3>
+      <p>...</p>
     </div>
     <SomeOtherReactComponent />
     ...
