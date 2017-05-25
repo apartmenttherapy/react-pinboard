@@ -1,3 +1,4 @@
+const PropTypes = require('prop-types');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const debounce = require('lodash.debounce');
@@ -20,52 +21,33 @@ const _createColumnOrdering = function(childWeights, numCols) {
   return columns;
 };
 
-const ReactPinboard = React.createClass({
-  childRefs: [],
-
-  propTypes: {
-    cols: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.arrayOf(React.PropTypes.shape({
-        media: React.PropTypes.string,
-        cols: React.PropTypes.number.isRequired
-      }))
-    ]),
-    spacing: React.PropTypes.string
-  },
-  
-  getDefaultProps: function() {
-    return {
-      cols: 2,
-      spacing: '1em'
-    };
-  },
-  
-  getInitialState: function() {
+class ReactPinboard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.childRefs = [];
     // Since we don't have DOM nodes to weigh yet, pretend all children are
     // equal-height for the initial, naive rendering.
-    const childWeights = this.props.children.map(() => 1);
-    return {
+    const childWeights = props.children.map(() => 1);
+    this.state = {
       columns: _createColumnOrdering(childWeights, this.getNumCols())
     };
-  },
+  }
   
-  componentDidMount: function() {
-    this._debouncedForceRefresh = debounce(this.forceRefresh, 100);
-    window.addEventListener('resize', this._debouncedForceRefresh);
-    
-    setTimeout(this.forceRefresh, 2000);
-  },
+  componentDidMount() {
+    this._debouncedForceRefresh = debounce(this.forceRefresh.bind(this), 100);
+    window.addEventListener('resize', this._debouncedForceRefresh);  
+    setTimeout(this._debouncedForceRefresh, 2000);
+  }
   
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     window.removeEventListener('resize', this._debouncedForceRefresh);
-  },
+  }
   
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     this.forceRefresh();
-  },
+  }
   
-  forceRefresh: function() {
+  forceRefresh() {
     const childWeights = this.childRefs.map((c) => {
       return ReactDOM.findDOMNode(c).children[0].offsetHeight;
     });
@@ -74,9 +56,9 @@ const ReactPinboard = React.createClass({
     if (JSON.stringify(newColumns) !== JSON.stringify(this.state.columns)) {
       this.setState({columns: newColumns});
     }
-  },
+  }
   
-  getNumCols: function() {
+  getNumCols() {
     if (typeof this.props.cols === 'number') {
       return this.props.cols;
     } else {
@@ -89,9 +71,9 @@ const ReactPinboard = React.createClass({
         return this.props.cols.filter((opt) => window.matchMedia(opt.media).matches)[0].cols;
       }
     }
-  },
+  }
   
-  getStyles: function() {
+  getStyles() {
     return {
       pinColumn: {
         width: `calc(${100 / this.getNumCols()}% - ${(this.getNumCols()-1)/this.getNumCols()} * ${this.props.spacing})`,
@@ -102,18 +84,18 @@ const ReactPinboard = React.createClass({
         marginBottom: this.props.spacing
       }
     };
-  },
+  }
   
-  render: function() {
+  render() {
     return (
       <div style={this.getStyles().pinboard}>
-        {this.state.columns.map(this.renderColumn)}
+        {this.state.columns.map(this.renderColumn, this)}
         <div style={{clear: 'left'}}></div>
       </div>
     );
-  },
+  }
   
-  renderColumn: function(childIndexes, columnIndex) {
+  renderColumn(childIndexes, columnIndex) {
     const style = Object.assign(
       {},
       this.getStyles().pinColumn,
@@ -122,18 +104,34 @@ const ReactPinboard = React.createClass({
     
     return (
       <div style={style} key={childIndexes[0]}>
-        {childIndexes.map(this.renderChild)}
+        {childIndexes.map(this.renderChild, this)}
       </div>
     );
-  },
+  }
   
-  renderChild: function(index) {
+  renderChild(index) {
     return (
       <div style={this.getStyles().pinWrapper} key={index} ref={(c) => { this.childRefs[index] = c; } }>
         {this.props.children[index]}
       </div>
     );
   }
-});
+}
+
+ReactPinboard.defaultProps = {
+  cols: 2,
+  spacing: '1em'
+};
+
+ReactPinboard.propTypes = {
+  cols: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.arrayOf(PropTypes.shape({
+      media: PropTypes.string,
+      cols: PropTypes.number.isRequired
+    }))
+  ]),
+  spacing: PropTypes.string
+};
 
 module.exports = ReactPinboard;
